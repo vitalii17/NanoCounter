@@ -75,6 +75,7 @@
 XQVibra::XQVibra(QObject *parent)
     : QObject(parent), d(new XQVibraPrivate(this))
 {
+    setDuration();
 }
 
 /*!
@@ -112,7 +113,18 @@ XQVibra::~XQVibra()
  */
 bool XQVibra::start(int duration)
 {
-    return d->start(duration);
+    if(m_enabled)
+    {
+        return d->start(duration);
+    }
+}
+
+bool XQVibra::startDuration()
+{
+    if(m_enabled)
+    {
+        return d->start(duration());
+    }
 }
 
 /*!
@@ -143,6 +155,24 @@ bool XQVibra::setIntensity(int intensity)
     return d->setIntensity(intensity);
 }
 
+void XQVibra::setEnabled(bool enabled)
+{
+    if(m_enabled != enabled)
+    {
+        m_enabled = enabled;
+        emit enabledChanged(enabled);
+    }
+}
+
+void XQVibra::setDuration(int duration)
+{
+    if(m_duration != duration)
+    {
+        m_duration = duration;
+        emit durationChanged(m_duration);
+    }
+}
+
 /*!
      Returns the current status of the vibration. This function can be used to check has vibration
      allowed in the user profile.
@@ -153,6 +183,16 @@ bool XQVibra::setIntensity(int intensity)
 XQVibra::Status XQVibra::currentStatus() const
 {
     return d->currentStatus();
+}
+
+bool XQVibra::enabled() const
+{
+    return m_enabled;
+}
+
+int XQVibra::duration() const
+{
+    return m_duration;
 }
 
 /*!

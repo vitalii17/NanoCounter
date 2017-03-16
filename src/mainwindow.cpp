@@ -8,8 +8,8 @@
 #endif // Q_OS_SYMBIAN
 
 MainWindow::MainWindow(QWidget *parent) :
-    QWidget(parent), m_pMenuBar(new QMenuBar(this)),
-    m_pLabel(new QLabel)
+    QWidget(parent), m_pMenuBar(new QMenuBar(this)), m_pLabel(new QLabel),
+    m_pVibra(new XQVibra(this)), m_pBacklightKeeper(new BacklightKeeper(this))
 {
     init();
 
@@ -58,10 +58,29 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
 {
     event->accept();
     m_counter.increment();
+}
 
-    if(m_settings.vibraEnabled())
+void MainWindow::keyPressEvent(QKeyEvent *event)
+{
+    switch(event->key())
     {
-        m_vibra.start(35);
+    case Qt::Key_VolumeUp:
+        if(m_settings.volumeKeysEnabled())
+        {
+            m_counter.increment();
+        }
+        else{}
+        break;
+    case Qt::Key_VolumeDown:
+        if(m_settings.volumeKeysEnabled())
+        {
+            m_counter.increment();
+        }
+        else{}
+        break;
+    default:
+        QWidget::keyPressEvent(event);
+        break;
     }
 }
 
@@ -91,26 +110,31 @@ void MainWindow::init()
     m_pLabel->setAlignment(Qt::AlignHCenter);
     m_pLabel->setFont(QFont(font().family(), 48));
 
-    m_vibra.setIntensity(80);
+    m_pVibra->setIntensity(80);
+    m_pVibra->setEnabled(m_settings.vibraEnabled());
+    m_pVibra->setDuration(35);
+    connect(&m_counter, SIGNAL(valueChanged(int)), m_pVibra, SLOT(startDuration()));
+    connect(&m_settings, SIGNAL(vibraEnabledChanged(bool)),
+            m_pVibra, SLOT(setEnabled(bool)));
+
+    m_pBacklightKeeper->setActive(m_settings.backlightAlwaysOn());
+    connect(&m_settings, SIGNAL(backlightAlwaysOnChanged(bool)),
+            m_pBacklightKeeper, SLOT(setActive(bool)));
 }
 
 void MainWindow::showAbout()
 {
-    showMessageBox("Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
-                   "Integer convallis massa urna, vel tristique metus interdum et. "
-                   "Donec vulputate eget metus eget aliquet. Mauris lacinia ex at "
-                   "egestas fermentum. Nam vitae sodales leo. Suspendisse vehicula "
-                   "orci est, a sagittis lectus luctus vel. Vestibulum consequat "
-                   "efficitur metus, nec rhoncus nibh cursus volutpat. Duis "
-                   "tincidunt magna vitae sapien bibendum, at hendrerit ex "
-                   "imperdiet. Mauris convallis tortor vel mauris congue rhoncus. "
-                   "Nam et lorem vitae libero dapibus ornare. ", "About");
+    showMessageBox("Nano Counter " + QString(APP_VERSION).remove('\"') + "\n\n" +
+                   tr("Developed by") + " " + tr("Vitalii Shunkov") + "\n" +
+                   "(shynkov@bigmir.net)" + "\n\n" + tr("Source code available on")
+                   + " " + "Github: \n" +
+                   "github.com/Vitalii17/NanoCounter", tr("About"));
 }
 
 void MainWindow::showSettings()
 {
     m_pWidgetSettings = new WidgetSettings(&m_settings);
-    m_pWidgetSettings->showFullScreen();
+    m_pWidgetSettings->showMaximized();
 }
 
 

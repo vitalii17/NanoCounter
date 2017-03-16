@@ -4,25 +4,38 @@
 # dir1.source = mydir
 DEPLOYMENTFOLDERS = # file1 dir1
 
+VERSION = 0.1.0
+DEFINES += "APP_VERSION=\"\\\"$$VERSION\\\"\""
+
 symbian {
-    TARGET.UID3 = 0xE1384038
-    LIBS += -laknnotify -lhwrmvibraclient
+    LIBS += -laknnotify \                           # Native messagebox
+            -lhwrmvibraclient \                     # Vibra
+            -lremconcoreapi -lremconinterfacebase \ # VolumeKeys
+
+    ICON = Icon.svg
+
+    contains(QT_VERSION, ^4.7\\.[0-3]) {
+        TARGET.UID3 = 0xE1384039
+        TARGET = NanoCounter_S1
+        ICON = Icon-S1.svg
+    }
+    contains(QT_VERSION, ^4.7.4) {
+        TARGET.UID3 = 0xE1384038
+        TARGET = NanoCounter_S3
+        ICON = Icon-Belle.svg
+    }
 
     vendorinfo = \
-        "%{\"Symbian Zone\"}" \
-        ":\"Symbian Zone\""
+        "%{\"Vitalii Shunkov\"}" \
+        ":\"Vitalii Shunkov\""
 
     my_deployment.pkg_prerules = vendorinfo
     DEPLOYMENT += my_deployment
 
-    release {
-        QMAKE_CXXFLAGS += -O1
+    CONFIG(release, debug|release) {
+        QMAKE_CXXFLAGS += -Os
     }
 }
-
-ICON = Icon.svg
-
-VERSION = 0.1.0
 
 DEPLOYMENT.display_name = Nano Counter
 
@@ -49,14 +62,18 @@ SOURCES += \
     src/settings.cpp \
     src/widgetsettings.cpp \
     src/xqvibra_p.cpp \
-    src/xqvibra.cpp
+    src/xqvibra.cpp \
+    src/backlightkeeper.cpp \
+    src/volumekeys.cpp
 HEADERS += \
     src/mainwindow.h \
     src/counter.h \
     src/settings.h \
     src/widgetsettings.h \
     src/xqvibra_p.h \
-    src/xqvibra.h
+    src/xqvibra.h \
+    src/backlightkeeper.h \
+    src/volumekeys.h
 
 # Please do not modify the following two lines. Required for deployment.
 include(deployment.pri)

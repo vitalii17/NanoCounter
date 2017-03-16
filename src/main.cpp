@@ -1,5 +1,6 @@
 #include <QtGui/QApplication>
 #include "mainwindow.h"
+#include "volumekeys.h"
 
 int main(int argc, char *argv[])
 {
@@ -9,8 +10,10 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationName("NanoCounter");
 
     MainWindow mainWindow;
-////    mainWindow.setAttribute(Qt::WA_LockPortraitOrientation);
+//    mainWindow.setAttribute(Qt::WA_LockPortraitOrientation);
     mainWindow.showMaximized();
+
+    VolumeKeys VolumeKeys(&mainWindow);
 
     return app.exec();
 }

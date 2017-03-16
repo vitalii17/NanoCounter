@@ -71,14 +71,34 @@ public:
 Q_SIGNALS:
     void statusChanged(XQVibra::Status status);
 
+    // User defined
+    void enabledChanged(bool enabled);
+    void durationChanged(int duration);
+
+public:
+    // User defined
+    bool enabled() const;
+    int  duration() const;
+
 public Q_SLOTS:
     bool start(int duration = InfiniteDuration);
+    // Start user defined
+    bool startDuration();
+    // End user defined
     bool stop();
     bool setIntensity(int intensity);
+
+    // User defined
+    void setEnabled(bool enabled);
+    void setDuration(int duration = InfiniteDuration);
 
 private:
     friend class XQVibraPrivate;
     XQVibraPrivate *d;
+
+    // User defined
+    bool m_enabled;
+    int  m_duration;
 };
 
 #endif // XQVIBRA_H

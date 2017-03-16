@@ -16,6 +16,8 @@ public:
     
 private slots:
     void vibraOnOff();
+    void backlightOnOff();
+    void volumeKeysOnOff();
 
 private:
     void init();
@@ -26,11 +28,14 @@ protected:
 
 private:
     QPushButton *m_pButtonVibraEn;
-    QPushButton *m_pButtonClose;
+    QPushButton *m_pButtonBacklight;
+    QPushButton *m_pButtonVolumeKeys;
 
     Settings *m_pSettings;
 
     bool m_vibraEn;
+    bool m_backlightEn;
+    bool m_volumeKeysEn;
 };
 
 #endif // WIDGETSETTINGS_H
