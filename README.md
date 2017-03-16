@@ -5,7 +5,7 @@ If you perform many of monotonous work it help you to count number of actions.
 ## Features:
 * Counting by taping to the screen and/or pressing volume keys.
 * Always keeps backlight is on if you need.
-* Saves all settings including latest counter value.
+* Saves all settings including latest counter value when you close application.
 * Works from Symbian 9.4 to Belle FP2.
 
 ## Tools to build
