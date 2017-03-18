@@ -14,16 +14,8 @@ symbian {
 
     ICON = Icon.svg
 
-    contains(QT_VERSION, ^4.7\\.[0-3]) {
-        TARGET.UID3 = 0xE1384039
-        TARGET = NanoCounter_S1
-        ICON = Icon-S1.svg
-    }
-    contains(QT_VERSION, ^4.7.4) {
-        TARGET.UID3 = 0xE1384038
-        TARGET = NanoCounter_S3
-        ICON = Icon-Belle.svg
-    }
+    TARGET.UID3 = 0xE1384038
+    TARGET = NanoCounter
 
     vendorinfo = \
         "%{\"Vitalii Shunkov\"}" \
