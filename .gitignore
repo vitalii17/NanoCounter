@@ -20,3 +20,5 @@ translate.bat
 translation_helper.txt
 RotateIt-build-simulator-Simulator_Qt_for_MinGW_4_4__Qt_SDK_________
 _clean.bat
+ABLD.BAT
+*.mk
