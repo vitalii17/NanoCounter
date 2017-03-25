@@ -7,6 +7,7 @@ Settings::Settings(QObject *parent) :
     m_vibraEnabled      = m_pSettings->value("VibraEnabled", true).toBool();
     m_backlightAlwaysOn = m_pSettings->value("BacklightAlwaysOn", false).toBool();
     m_volumeKeysEnabled = m_pSettings->value("VolumKeysEnabled", false).toBool();
+    m_reversed          = m_pSettings->value("Reversed", false).toBool();
 }
 
 Settings::~Settings()
@@ -26,6 +27,10 @@ Settings::~Settings()
     if(m_volumeKeysEnabled != m_pSettings->value("VolumKeysEnabled", false).toBool())
     {
         m_pSettings->setValue("VolumKeysEnabled", m_volumeKeysEnabled);
+    }
+    if(m_reversed != m_pSettings->value("Reversed", false).toBool())
+    {
+        m_pSettings->setValue("Reversed", m_reversed);
     }
 }
 
@@ -65,6 +70,15 @@ void Settings::setVolumKeysEnabled(bool arg)
     }
 }
 
+void Settings::setReversed(bool arg)
+{
+    if(m_reversed != arg)
+    {
+        m_reversed = arg;
+        emit reversedChanged(m_reversed);
+    }
+}
+
 int Settings::counterValue() const
 {
     return m_counterValue;
@@ -83,5 +97,10 @@ bool Settings::backlightAlwaysOn() const
 bool Settings::volumeKeysEnabled() const
 {
     return m_volumeKeysEnabled;
+}
+
+bool Settings::reversed() const
+{
+    return m_reversed;
 }
 

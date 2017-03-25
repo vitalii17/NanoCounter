@@ -16,18 +16,21 @@ signals:
     void vibraEnabledChanged     (bool arg);
     void backlightAlwaysOnChanged(bool arg);
     void volumKeysEnabledChanged (bool arg);
+    void reversedChanged         (bool arg);
     
 public slots:
     void setCounterValue     (int arg);
     void setVibraEnabled     (bool arg);
     void setBacklightAlwaysOn(bool arg);
     void setVolumKeysEnabled (bool arg);
+    void setReversed         (bool arg);
 
 public:
     int  counterValue()               const;
     bool vibraEnabled()               const;
     bool backlightAlwaysOn()          const;
     bool volumeKeysEnabled()          const;
+    bool reversed()                   const;
 
 private:
     QSettings          *m_pSettings;
@@ -35,6 +38,7 @@ private:
     bool                m_vibraEnabled;
     bool                m_backlightAlwaysOn;
     bool                m_volumeKeysEnabled;
+    bool                m_reversed;
 };
 
 #endif // SETTINGS_H
