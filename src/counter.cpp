@@ -18,12 +18,24 @@ void Counter::reset()
 void Counter::increment()
 {
     m_counter = m_counter + 1;
+
+    if(m_counter < 0)
+    {
+        m_counter = 0;
+    }
+
     emit valueChanged(m_counter);
 }
 
 void Counter::decrement()
 {
     m_counter = m_counter - 1;
+
+    if(m_counter < 0)
+    {
+        m_counter = 0;
+    }
+
     emit valueChanged(m_counter);
 }
 
