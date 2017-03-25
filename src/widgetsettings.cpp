@@ -12,10 +12,12 @@ WidgetSettings::WidgetSettings(Settings *settings, QWidget *parent) :
     mainLayout->addWidget(m_pButtonVibraEn, 0, Qt::AlignHCenter);
     mainLayout->addWidget(m_pButtonBacklight, 0, Qt::AlignHCenter);
     mainLayout->addWidget(m_pButtonVolumeKeys, 0, Qt::AlignHCenter);
+    mainLayout->addWidget(m_pButtonMode, 0, Qt::AlignHCenter);
 
     connect(m_pButtonVibraEn, SIGNAL(clicked()), this, SLOT(vibraOnOff()));
     connect(m_pButtonBacklight, SIGNAL(clicked()), this, SLOT(backlightOnOff()));
     connect(m_pButtonVolumeKeys, SIGNAL(clicked()), this, SLOT(volumeKeysOnOff()));
+    connect(m_pButtonMode, SIGNAL(clicked()), this, SLOT(incDecMode()));
 
     QAction *closeAction = new QAction(tr("Save"), this);
     closeAction->setSoftKeyRole(QAction::NegativeSoftKey);
@@ -31,6 +33,7 @@ WidgetSettings::~WidgetSettings()
     m_pSettings->setVibraEnabled(m_vibraEn);
     m_pSettings->setBacklightAlwaysOn(m_backlightEn);
     m_pSettings->setVolumKeysEnabled(m_volumeKeysEn);
+    m_pSettings->setReversed(m_reversed);
 }
 
 void WidgetSettings::vibraOnOff()
@@ -60,11 +63,19 @@ void WidgetSettings::volumeKeysOnOff()
 
 }
 
+void WidgetSettings::incDecMode()
+{
+    m_reversed = !m_reversed;
+    m_pButtonMode->setText(tr("Mode") + ": " +
+                           (m_reversed ? tr("Decrement") : tr("Increment")));
+}
+
 void WidgetSettings::init()
 {
     m_vibraEn      = m_pSettings->vibraEnabled();
     m_backlightEn  = m_pSettings->backlightAlwaysOn();
     m_volumeKeysEn = m_pSettings->volumeKeysEnabled();
+    m_reversed     = m_pSettings->reversed();
 
     // Vibra button
     m_pButtonVibraEn = new QPushButton(tr("Vibra") + ": " +
@@ -85,6 +96,11 @@ void WidgetSettings::init()
                                                             tr("Passive")), this);
     m_pButtonVolumeKeys->setCheckable(true);
     m_pButtonVolumeKeys->setChecked(m_volumeKeysEn);
+
+    // Mode button
+    m_pButtonMode = new QPushButton(tr("Mode") + ": " +
+                                    (m_reversed ? tr("Decrement") :
+                                                  tr("Increment")), this);
 
     updateButtonsWidth(width() / 3 * 2);
 }

@@ -1,7 +1,7 @@
 #include "counter.h"
 
 Counter::Counter(QObject *parent) :
-    QObject(parent)
+    QObject(parent), m_triggerMode(Normal)
 {
     reset();
 }
@@ -33,6 +33,43 @@ void Counter::setValue(int arg)
     {
         m_counter = arg;
         emit valueChanged(m_counter);
+    }
+}
+
+void Counter::setTriggerMode(Counter::TriggerMode mode)
+{
+    if(m_triggerMode != mode)
+    {
+        m_triggerMode = mode;
+        emit triggerModeChanged(m_triggerMode);
+    }
+}
+
+void Counter::setReversed(bool reversed)
+{
+    if(reversed)
+    {
+        setTriggerMode(Reverse);
+    }
+    else
+    {
+        setTriggerMode(Normal);
+    }
+}
+
+void Counter::trigger()
+{
+    switch(m_triggerMode)
+    {
+    case Normal:
+        increment();
+        break;
+    case Reverse:
+        decrement();
+        break;
+    default:
+        increment();
+        break;
     }
 }
 

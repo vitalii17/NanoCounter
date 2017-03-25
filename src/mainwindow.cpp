@@ -57,7 +57,8 @@ void MainWindow::dialogSet()
 void MainWindow::mousePressEvent(QMouseEvent *event)
 {
     event->accept();
-    m_counter.increment();
+//    m_counter.increment();
+    m_counter.trigger();
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event)
@@ -67,14 +68,16 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     case Qt::Key_VolumeUp:
         if(m_settings.volumeKeysEnabled())
         {
-            m_counter.increment();
+//            m_counter.increment();
+            m_counter.trigger();
         }
         else{}
         break;
     case Qt::Key_VolumeDown:
         if(m_settings.volumeKeysEnabled())
         {
-            m_counter.increment();
+//            m_counter.increment();
+            m_counter.trigger();
         }
         else{}
         break;
@@ -105,6 +108,9 @@ void MainWindow::showMessageBox(const QString &text, const QString &title)
 void MainWindow::init()
 {
     m_counter.setValue(m_settings.counterValue());
+    m_counter.setReversed(m_settings.reversed());
+    connect(&m_settings, SIGNAL(reversedChanged(bool)),
+            &m_counter, SLOT(setReversed(bool)));
 
     m_pLabel->setNum(m_settings.counterValue());
     m_pLabel->setAlignment(Qt::AlignHCenter);

@@ -18,6 +18,7 @@ private slots:
     void vibraOnOff();
     void backlightOnOff();
     void volumeKeysOnOff();
+    void incDecMode();
 
 private:
     void init();
@@ -30,12 +31,14 @@ private:
     QPushButton *m_pButtonVibraEn;
     QPushButton *m_pButtonBacklight;
     QPushButton *m_pButtonVolumeKeys;
+    QPushButton *m_pButtonMode;
 
     Settings *m_pSettings;
 
     bool m_vibraEn;
     bool m_backlightEn;
     bool m_volumeKeysEn;
+    bool m_reversed;
 };
 
 #endif // WIDGETSETTINGS_H
