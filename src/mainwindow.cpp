@@ -57,7 +57,6 @@ void MainWindow::dialogSet()
 void MainWindow::mousePressEvent(QMouseEvent *event)
 {
     event->accept();
-//    m_counter.increment();
     m_counter.trigger();
 }
 
@@ -68,7 +67,6 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     case Qt::Key_VolumeUp:
         if(m_settings.volumeKeysEnabled())
         {
-//            m_counter.increment();
             m_counter.trigger();
         }
         else{}
@@ -76,7 +74,6 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     case Qt::Key_VolumeDown:
         if(m_settings.volumeKeysEnabled())
         {
-//            m_counter.increment();
             m_counter.trigger();
         }
         else{}
@@ -119,9 +116,12 @@ void MainWindow::init()
     m_pVibra->setIntensity(80);
     m_pVibra->setEnabled(m_settings.vibraEnabled());
     m_pVibra->setDuration(35);
+    m_pVibra->setPause(120);
+    m_pVibra->setRepeatTimes(3);
     connect(&m_counter, SIGNAL(valueChanged(int)), m_pVibra, SLOT(startDuration()));
     connect(&m_settings, SIGNAL(vibraEnabledChanged(bool)),
             m_pVibra, SLOT(setEnabled(bool)));
+    connect(&m_counter, SIGNAL(reachedZero()), m_pVibra, SLOT(startRepeat()));
 
     m_pBacklightKeeper->setActive(m_settings.backlightAlwaysOn());
     connect(&m_settings, SIGNAL(backlightAlwaysOnChanged(bool)),
