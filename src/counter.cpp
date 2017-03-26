@@ -36,6 +36,7 @@ void Counter::decrement()
     if(m_counter < 0)
     {
         m_counter = 0;
+        emit errorDecrementLimit();
     }
 
     if((m_counter == 0) && (previousCounter == 1))

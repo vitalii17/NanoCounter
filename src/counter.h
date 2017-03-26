@@ -18,6 +18,7 @@ signals:
     void valueChanged(int arg);
     void triggerModeChanged(TriggerMode mode);
     void reachedZero();
+    void errorDecrementLimit();
     
 public slots:
     void reset();
