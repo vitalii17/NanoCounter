@@ -29,6 +29,8 @@ void Counter::increment()
 
 void Counter::decrement()
 {
+    int previousCounter = m_counter;
+
     m_counter = m_counter - 1;
 
     if(m_counter < 0)
@@ -36,8 +38,12 @@ void Counter::decrement()
         m_counter = 0;
     }
 
+    if((m_counter == 0) && (previousCounter == 1))
+    {
+        emit reachedZero();
+    }
+
     emit valueChanged(m_counter);
-    emit reachedZero();
 }
 
 void Counter::setValue(int arg)
