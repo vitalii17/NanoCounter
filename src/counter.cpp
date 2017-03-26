@@ -37,6 +37,7 @@ void Counter::decrement()
     }
 
     emit valueChanged(m_counter);
+    emit reachedZero();
 }
 
 void Counter::setValue(int arg)

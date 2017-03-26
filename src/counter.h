@@ -17,6 +17,7 @@ public:
 signals:
     void valueChanged(int arg);
     void triggerModeChanged(TriggerMode mode);
+    void reachedZero();
     
 public slots:
     void reset();
