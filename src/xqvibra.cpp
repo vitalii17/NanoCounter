@@ -76,6 +76,8 @@ XQVibra::XQVibra(QObject *parent)
     : QObject(parent), d(new XQVibraPrivate(this))
 {
     setDuration();
+    setPause();
+    setRepeatTimes();
 }
 
 /*!
@@ -127,6 +129,18 @@ bool XQVibra::startDuration()
     }
 }
 
+void XQVibra::startRepeat()
+{
+    if(m_enabled)
+    {
+//        d->start(duration());
+        for(int i = 0; i < m_repeatTimes; i++)
+        {
+            QTimer::singleShot(m_pause * i, this, SLOT(startDuration()));
+        }
+    }
+}
+
 /*!
      Interrupts the device vibration immediately.
 
@@ -170,6 +184,24 @@ void XQVibra::setDuration(int duration)
     {
         m_duration = duration;
         emit durationChanged(m_duration);
+    }
+}
+
+void XQVibra::setPause(int pause)
+{
+    if(m_pause != pause)
+    {
+        m_pause = pause;
+        emit pauseChanged(m_pause);
+    }
+}
+
+void XQVibra::setRepeatTimes(int repeatTimes)
+{
+    if(m_repeatTimes != repeatTimes)
+    {
+        m_repeatTimes = repeatTimes;
+        emit repeatTimesChanged(m_repeatTimes);
     }
 }
 

@@ -74,6 +74,8 @@ Q_SIGNALS:
     // User defined
     void enabledChanged(bool enabled);
     void durationChanged(int duration);
+    void pauseChanged(int pause);
+    void repeatTimesChanged(int repeatTimes);
 
 public:
     // User defined
@@ -84,6 +86,7 @@ public Q_SLOTS:
     bool start(int duration = InfiniteDuration);
     // Start user defined
     bool startDuration();
+    void startRepeat();
     // End user defined
     bool stop();
     bool setIntensity(int intensity);
@@ -91,6 +94,8 @@ public Q_SLOTS:
     // User defined
     void setEnabled(bool enabled);
     void setDuration(int duration = InfiniteDuration);
+    void setPause(int pause = 100);
+    void setRepeatTimes(int repeatTimes = 1);
 
 private:
     friend class XQVibraPrivate;
@@ -99,6 +104,8 @@ private:
     // User defined
     bool m_enabled;
     int  m_duration;
+    int  m_pause;
+    int  m_repeatTimes;
 };
 
 #endif // XQVIBRA_H
