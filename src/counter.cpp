@@ -17,42 +17,36 @@ void Counter::reset()
 
 void Counter::increment()
 {
-    m_counter = m_counter + 1;
-
-    if(m_counter < 0)
-    {
-        m_counter = 0;
-    }
-
-    emit valueChanged(m_counter);
+    setValue(m_counter + 1);
 }
 
 void Counter::decrement()
 {
-    int previousCounter = m_counter;
-
-    m_counter = m_counter - 1;
-
-    if(m_counter < 0)
-    {
-        m_counter = 0;
-        emit errorDecrementLimit();
-    }
-
-    if((m_counter == 0) && (previousCounter == 1))
-    {
-        emit reachedZero();
-    }
-
-    emit valueChanged(m_counter);
+    setValue(m_counter - 1);
 }
 
 void Counter::setValue(int arg)
 {
     if(m_counter != arg)
     {
+        int previousCounter = m_counter;
         m_counter = arg;
-        emit valueChanged(m_counter);
+
+        if((m_counter == 0) && (previousCounter == 1))
+        {
+            emit valueChanged(m_counter);
+            emit reachedZero();
+        }
+        else if(m_counter < 0)
+        {
+            m_counter = 0;
+            emit valueChanged(m_counter);
+            emit errorDecrementLimit();
+        }
+        else
+        {
+            emit valueChanged(m_counter);
+        }
     }
 }
 
