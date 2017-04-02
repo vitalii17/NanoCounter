@@ -58,7 +58,7 @@ void WidgetSettings::volumeKeysOnOff()
 {
     m_pButtonVolumeKeys->setText(tr("Volume Keys") + ": " +
                                  (m_pButtonVolumeKeys->isChecked() ?
-                                      tr("Active") : tr("Passive")));
+                                      tr("Enabled") : tr("Disabled")));
     m_volumeKeysEn = m_pButtonVolumeKeys->isChecked();
 
 }
@@ -92,8 +92,8 @@ void WidgetSettings::init()
 
     // Volume keys button
     m_pButtonVolumeKeys = new QPushButton(tr("Volume Keys") + ": " +
-                                          (m_volumeKeysEn ? tr("Active") :
-                                                            tr("Passive")), this);
+                                          (m_volumeKeysEn ? tr("Enabled") :
+                                                            tr("Disabled")), this);
     m_pButtonVolumeKeys->setCheckable(true);
     m_pButtonVolumeKeys->setChecked(m_volumeKeysEn);
 
