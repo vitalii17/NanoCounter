@@ -9,7 +9,8 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QWidget(parent), m_pMenuBar(new QMenuBar(this)), m_pLabel(new QLabel),
-    m_pVibra(new XQVibra(this)), m_pBacklightKeeper(new BacklightKeeper(this))
+    m_pMessageLabel(new QLabel), m_pVibra(new XQVibra(this)),
+    m_pBacklightKeeper(new BacklightKeeper(this))
 {
     init();
 
@@ -30,8 +31,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->addWidget(m_pLabel);
+    mainLayout->addWidget(m_pMessageLabel, Qt::AlignTop);
+    mainLayout->addStretch(1);
 
     connect(&m_counter, SIGNAL(valueChanged(int)), m_pLabel, SLOT(setNum(int)));
+    connect(&m_counter, SIGNAL(valueChanged(int)), m_pMessageLabel, SLOT(hide()));
+    connect(&m_counter, SIGNAL(errorDecrementLimit()), m_pMessageLabel, SLOT(show()));
+    connect(&m_counter, SIGNAL(reachedZero()), m_pMessageLabel, SLOT(show()));
 
     setLayout(mainLayout);
 }
@@ -62,25 +68,24 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
 
 void MainWindow::keyPressEvent(QKeyEvent *event)
 {
-    switch(event->key())
+    if(m_settings.volumeKeysEnabled())
     {
-    case Qt::Key_VolumeUp:
-        if(m_settings.volumeKeysEnabled())
+        switch(event->key())
         {
+        case Qt::Key_VolumeUp:
             m_counter.trigger();
-        }
-        else{}
-        break;
-    case Qt::Key_VolumeDown:
-        if(m_settings.volumeKeysEnabled())
-        {
+            break;
+        case Qt::Key_VolumeDown:
             m_counter.trigger();
+            break;
+        default:
+            QWidget::keyPressEvent(event);
+            break;
         }
-        else{}
-        break;
-    default:
+    }
+    else
+    {
         QWidget::keyPressEvent(event);
-        break;
     }
 }
 
@@ -113,6 +118,14 @@ void MainWindow::init()
     m_pLabel->setAlignment(Qt::AlignHCenter);
     m_pLabel->setFont(QFont(font().family(), 48));
 
+    m_pMessageLabel->setText(tr("Zero value is reached. Set new value or change "
+                             "counter direction to increment mode in settings."));
+    m_pMessageLabel->setAlignment(Qt::AlignHCenter);
+    m_pMessageLabel->setFont(QFont(font().family(), 10));
+    m_pMessageLabel->setWordWrap(true);
+    m_pMessageLabel->setStyleSheet("QLabel {color: red;}");
+    m_pMessageLabel->setVisible((m_counter.value() <= 0) ? true : false);
+
     m_pVibra->setIntensity(80);
     m_pVibra->setEnabled(m_settings.vibraEnabled());
     m_pVibra->setDuration(35);
@@ -122,6 +135,7 @@ void MainWindow::init()
     connect(&m_settings, SIGNAL(vibraEnabledChanged(bool)),
             m_pVibra, SLOT(setEnabled(bool)));
     connect(&m_counter, SIGNAL(reachedZero()), m_pVibra, SLOT(startRepeat()));
+    connect(&m_counter, SIGNAL(errorDecrementLimit()), m_pVibra, SLOT(startRepeat()));
 
     m_pBacklightKeeper->setActive(m_settings.backlightAlwaysOn());
     connect(&m_settings, SIGNAL(backlightAlwaysOnChanged(bool)),

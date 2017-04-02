@@ -36,6 +36,7 @@ private:
 private:
     QMenuBar        *m_pMenuBar;
     QLabel          *m_pLabel;
+    QLabel          *m_pMessageLabel;
     Counter          m_counter;
     Settings         m_settings;
     WidgetSettings  *m_pWidgetSettings;
