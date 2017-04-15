@@ -4,7 +4,7 @@
 # dir1.source = mydir
 DEPLOYMENTFOLDERS = # file1 dir1
 
-VERSION = 0.1.0
+VERSION = 0.1.1
 DEFINES += "APP_VERSION=\"\\\"$$VERSION\\\"\""
 
 symbian {
