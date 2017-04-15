@@ -125,7 +125,7 @@ void MainWindow::init()
     m_pMessageLabel->setFont(QFont(font().family(), 10));
     m_pMessageLabel->setWordWrap(true);
     m_pMessageLabel->setStyleSheet("QLabel {color: red;}");
-    m_pMessageLabel->setVisible((m_counter.value() <= 0) ? true : false);
+    m_pMessageLabel->setVisible(false);
 
     m_pVibra->setIntensity(80);
     m_pVibra->setEnabled(m_settings.vibraEnabled());
