@@ -1,5 +1,5 @@
 # NanoCounter
-The Qt-based small application for Symbian that allow to count the number of clicks. 
+The Qt-based small application for Symbian that helps to count the number of clicks. 
 If you perform many of monotonous work it help you to count number of actions.
 
 ## Features:
