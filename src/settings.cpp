@@ -8,6 +8,8 @@ Settings::Settings(QObject *parent) :
     m_backlightAlwaysOn = m_pSettings->value("BacklightAlwaysOn", false).toBool();
     m_volumeKeysEnabled = m_pSettings->value("VolumKeysEnabled", false).toBool();
     m_reversed          = m_pSettings->value("Reversed", false).toBool();
+    m_orientation       = m_pSettings->value("Orientation",
+                                             Qt::WA_AutoOrientation).toInt();
 }
 
 Settings::~Settings()
@@ -31,6 +33,11 @@ Settings::~Settings()
     if(m_reversed != m_pSettings->value("Reversed", false).toBool())
     {
         m_pSettings->setValue("Reversed", m_reversed);
+    }
+    if(m_orientation != m_pSettings->value("Orientation",
+                                           Qt::WA_AutoOrientation).toInt())
+    {
+        m_pSettings->setValue("Orientation", m_orientation);
     }
 }
 
@@ -79,6 +86,15 @@ void Settings::setReversed(bool arg)
     }
 }
 
+void Settings::setOrientation(int arg)
+{
+    if(m_orientation != arg)
+    {
+        m_orientation = arg;
+        emit orientationChanged(m_orientation);
+    }
+}
+
 int Settings::counterValue() const
 {
     return m_counterValue;
@@ -102,5 +118,10 @@ bool Settings::volumeKeysEnabled() const
 bool Settings::reversed() const
 {
     return m_reversed;
+}
+
+int Settings::orientation() const
+{
+    return m_orientation;
 }
 

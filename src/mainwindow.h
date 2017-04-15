@@ -24,6 +24,7 @@ private slots:
     void dialogSet();
     void showAbout();
     void showSettings();
+    void setOrientation(int orientation);
 
 protected:
     void mousePressEvent(QMouseEvent *event);

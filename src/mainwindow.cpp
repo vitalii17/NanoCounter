@@ -39,6 +39,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(&m_counter, SIGNAL(errorDecrementLimit()), m_pMessageLabel, SLOT(show()));
     connect(&m_counter, SIGNAL(reachedZero()), m_pMessageLabel, SLOT(show()));
 
+    setOrientation(static_cast<Qt::WidgetAttribute>(m_settings.orientation()));
     setLayout(mainLayout);
 }
 
@@ -140,6 +141,9 @@ void MainWindow::init()
     m_pBacklightKeeper->setActive(m_settings.backlightAlwaysOn());
     connect(&m_settings, SIGNAL(backlightAlwaysOnChanged(bool)),
             m_pBacklightKeeper, SLOT(setActive(bool)));
+
+    connect(&m_settings, SIGNAL(orientationChanged(int)),
+            this, SLOT(setOrientation(int)));
 }
 
 void MainWindow::showAbout()
@@ -155,6 +159,11 @@ void MainWindow::showSettings()
 {
     m_pWidgetSettings = new WidgetSettings(&m_settings);
     m_pWidgetSettings->showMaximized();
+}
+
+void MainWindow::setOrientation(int orientation)
+{
+    setAttribute(static_cast<Qt::WidgetAttribute>(orientation));
 }
 
 

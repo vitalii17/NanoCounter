@@ -19,10 +19,12 @@ private slots:
     void backlightOnOff();
     void volumeKeysOnOff();
     void incDecMode();
+    void orientationToggled();
 
 private:
     void init();
     void updateButtonsWidth(int newWidth);
+    QString getOrientationString(int orientation);
 
 protected:
     void resizeEvent(QResizeEvent *event);
@@ -32,6 +34,7 @@ private:
     QPushButton *m_pButtonBacklight;
     QPushButton *m_pButtonVolumeKeys;
     QPushButton *m_pButtonMode;
+    QPushButton *m_pButtonOrientation;
 
     Settings *m_pSettings;
 
@@ -39,6 +42,7 @@ private:
     bool m_backlightEn;
     bool m_volumeKeysEn;
     bool m_reversed;
+    int  m_orientation;
 };
 
 #endif // WIDGETSETTINGS_H

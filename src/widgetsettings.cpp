@@ -13,11 +13,13 @@ WidgetSettings::WidgetSettings(Settings *settings, QWidget *parent) :
     mainLayout->addWidget(m_pButtonBacklight, 0, Qt::AlignHCenter);
     mainLayout->addWidget(m_pButtonVolumeKeys, 0, Qt::AlignHCenter);
     mainLayout->addWidget(m_pButtonMode, 0, Qt::AlignHCenter);
+    mainLayout->addWidget(m_pButtonOrientation, 0, Qt::AlignHCenter);
 
     connect(m_pButtonVibraEn, SIGNAL(clicked()), this, SLOT(vibraOnOff()));
     connect(m_pButtonBacklight, SIGNAL(clicked()), this, SLOT(backlightOnOff()));
     connect(m_pButtonVolumeKeys, SIGNAL(clicked()), this, SLOT(volumeKeysOnOff()));
     connect(m_pButtonMode, SIGNAL(clicked()), this, SLOT(incDecMode()));
+    connect(m_pButtonOrientation, SIGNAL(clicked()), this, SLOT(orientationToggled()));
 
     QAction *closeAction = new QAction(tr("Save"), this);
     closeAction->setSoftKeyRole(QAction::NegativeSoftKey);
@@ -34,6 +36,7 @@ WidgetSettings::~WidgetSettings()
     m_pSettings->setBacklightAlwaysOn(m_backlightEn);
     m_pSettings->setVolumKeysEnabled(m_volumeKeysEn);
     m_pSettings->setReversed(m_reversed);
+    m_pSettings->setOrientation(m_orientation);
 }
 
 void WidgetSettings::vibraOnOff()
@@ -70,12 +73,32 @@ void WidgetSettings::incDecMode()
                            (m_reversed ? tr("Decrement") : tr("Increment")));
 }
 
+void WidgetSettings::orientationToggled()
+{
+    if(m_orientation == Qt::WA_AutoOrientation)
+    {
+        m_orientation = Qt::WA_LockPortraitOrientation;
+        m_pButtonOrientation->setText(tr("Orientation: ") + tr("Portrait"));
+    }
+    else if(m_orientation == Qt::WA_LockPortraitOrientation)
+    {
+        m_orientation = Qt::WA_LockLandscapeOrientation;
+        m_pButtonOrientation->setText(tr("Orientation: ") + tr("Landscape"));
+    }
+    else
+    {
+        m_orientation = Qt::WA_AutoOrientation;
+        m_pButtonOrientation->setText(tr("Orientation: ") + tr("Auto"));
+    }
+}
+
 void WidgetSettings::init()
 {
     m_vibraEn      = m_pSettings->vibraEnabled();
     m_backlightEn  = m_pSettings->backlightAlwaysOn();
     m_volumeKeysEn = m_pSettings->volumeKeysEnabled();
     m_reversed     = m_pSettings->reversed();
+    m_orientation  = m_pSettings->orientation();
 
     // Vibra button
     m_pButtonVibraEn = new QPushButton(tr("Vibra") + ": " +
@@ -102,6 +125,10 @@ void WidgetSettings::init()
                                     (m_reversed ? tr("Decrement") :
                                                   tr("Increment")), this);
 
+    // Orientation button
+    m_pButtonOrientation = new QPushButton(tr("Orientation: ") +
+                                           getOrientationString(m_orientation));
+
     updateButtonsWidth(width() / 3 * 2);
 }
 
@@ -112,6 +139,29 @@ void WidgetSettings::updateButtonsWidth(int newWidth)
     {
         buttons.at(i)->setFixedWidth(newWidth);
     }
+}
+
+QString WidgetSettings::getOrientationString(int orientation)
+{
+    QString result = "";
+
+    switch(orientation)
+    {
+    case Qt::WA_AutoOrientation:
+        result = tr("Auto");
+        break;
+    case Qt::WA_LockPortraitOrientation:
+        result = tr("Portrait");
+        break;
+    case Qt::WA_LockLandscapeOrientation:
+        result = tr("Landscape");
+        break;
+    default:
+        result = tr("Auto");
+        break;
+    }
+
+    return result;
 }
 
 void WidgetSettings::resizeEvent(QResizeEvent *event)
